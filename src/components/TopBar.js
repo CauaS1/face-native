@@ -17,9 +17,10 @@ const Notifications = props => {
 const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
-    margin: 14,
+    padding: 14,
     alignItems: "center",
     justifyContent: "space-between",
+    backgroundColor: "#fff"
   },
   
   backgroundSearch: {

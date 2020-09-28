@@ -31,6 +31,7 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
     justifyContent: "space-between",
     paddingLeft: 10,
+    backgroundColor: '#fff',
 
   },
   title: {

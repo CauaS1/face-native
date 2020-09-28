@@ -1,16 +1,54 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet, FlatList, Image, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, FlatList, Image, TouchableOpacity } from 'react-native';
 
 import Config from '../components/Friends/ConfigSection';
 
 import { Avatar, Icon } from 'react-native-elements';
+
 import Modal from 'react-native-modal';
+
+const FriendItem = ({ item, onPressPhoto }) => {
+  const [requested, setRequested] = React.useState(false)
+  return (
+    <View style={{backgroundColor: "#fff"}}>
+      <View style={styles.peopleContainer}>
+        <TouchableOpacity onPress={() => console.log('nothing by now')}>
+          <Image source={item.photo} style={styles.photo} />
+        </TouchableOpacity>
+        <View style={styles.geralContent}>
+          <Text style={styles.name}>{item.name}</Text>
+          <View style={styles.buttonContainer}>
+            {!requested ?
+              <View style={{ flexDirection: 'row' }} >
+                <TouchableOpacity style={[styles.button, styles.add]} onPress={() => setRequested(true)}>
+                  <Text style={{ color: "#fff", fontWeight: "bold" }}>Add Friend</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={[styles.button, styles.remove]} 
+                  onPress={() => setRequested(false)} 
+                >
+                  <Text style={{ color: "#050505", fontWeight: "bold" }}>Remove</Text>
+                </TouchableOpacity>
+              </View>
+              :
+              <TouchableOpacity style={[styles.button, styles.remove, styles.removeBig]} onPress={() => setRequested(false)} >
+                <Text style={{ color: "#050505", fontWeight: "bold" }}>Remove Request</Text>
+              </TouchableOpacity>
+            }
+          </View>
+        </View>
+      </View>
+    </View>
+  )
+}
+
+
+
 
 export default class Friends extends Component {
   state = {
     visible: false,
     userInfo: null,
-    requested: null
+    data: this.props.info
   }
 
   topComponents() {
@@ -29,38 +67,67 @@ export default class Friends extends Component {
     );
   }
 
-  buttonAdd() {
-    if (this.state.requested === null) {
-      return (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.add]} onPress={() => this.setState({ requested: true })}>
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>Add Friend</Text>
-          </TouchableOpacity>
+  removeSuggestion = id => {
+    this.setState({
+      data: this.state.data.filter(item => item.id !== id)
+    })
+  }
 
-          <TouchableOpacity style={[styles.button, styles.remove]}>
-            <Text style={{ color: "#050505", fontWeight: "bold" }}>Remove</Text>
-          </TouchableOpacity>
-        </View>
-      )
-    } else if (this.state.requested === true) {
-      return (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.remove, styles.removeBig]} onPress={() => this.setState({ requested: false })} >
-            <Text style={{ color: "#050505", fontWeight: "bold" }}>Remove</Text>
-          </TouchableOpacity>
-        </View>
-      )
+  onPressPhoto = ({ visible, userInfo }) => { //thy to do it later
+    if (visible === undefined) {
+      return null
     } else {
       return (
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={[styles.button, styles.add]} onPress={() => this.setState({ requested: true })}>
-            <Text style={{ color: "#fff", fontWeight: "bold" }}>Add Friend</Text>
-          </TouchableOpacity>
+        <Modal
+          isVisible={visible}
+          swipeDirection="down"
+          backdropColor="#000"
+          style={styles.bottomModal}
+        >
+          <View style={modal.modalContainer}>
+            {userInfo && (
+              <View style={modal.header}>
+                <Avatar
+                  rounded
+                  source={userInfo.photo}
+                  size={100}
+                />
+                <View style={modal.about}>
+                  <Text style={modal.name}>{userInfo.name}</Text>
+                  <Text style={{ color: '#626971' }}>{userInfo.bio}</Text>
+                </View>
+              </View>
+            )}
 
-          <TouchableOpacity style={[styles.button, styles.remove]}>
-            <Text style={{ color: "#050505", fontWeight: "bold" }}>Remove</Text>
-          </TouchableOpacity>
-        </View>
+            {userInfo && (
+              <View style={modal.followers}>
+                <TouchableOpacity style={modal.followersView}>
+                  <Text style={modal.followBold}>Friends</Text>
+                  <Text>{userInfo.friends}</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={modal.followersView}>
+                  <Text style={modal.followBold} >Followed by</Text>
+                  <Text> {userInfo.followers} </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+
+            <View style={modal.buttonsContainer}>
+              <TouchableOpacity style={modal.button}>
+                <Text>Add Friend</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity style={[modal.button, modal.buttonTrash]} onPress={() => console.log('das')} >
+                <Icon type="font-awesome" color="#1a76f6" size={18} name="trash" />
+              </TouchableOpacity>
+
+              <TouchableOpacity style={modal.button}>
+                <Text>Follow</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       )
     }
   }
@@ -73,74 +140,8 @@ export default class Friends extends Component {
           data={inform}
           keyExtractor={item => item.id.toString()}
           ListHeaderComponent={this.topComponents()} //with the ListHeaderComponent the components will not repeat  
-          renderItem={({ item }) => (
-            <View style={styles.peopleContainer}>
-              <TouchableOpacity onPress={() => this.setState({ visible: true, userInfo: item })}>
-                <Image source={item.photo} style={styles.photo} />
-              </TouchableOpacity>
-              <View style={styles.geralContent}>
-
-                <Text style={styles.name}>{item.name}</Text>
-                {this.buttonAdd()}
-              </View>
-            </View>
-          )}
+          renderItem={({ item }) => <FriendItem item={item} /*onPressPhoto={this.onPressPhoto}*/ />}
         />
-
-        <Modal
-          isVisible={this.state.visible}
-          swipeDirection="down"
-          scrollTo="top"
-          backdropColor="#000"
-          style={styles.bottomModal}
-        >
-          <View style={modal.modalContainer}>
-            {this.state.userInfo && (
-
-              <View style={modal.header}>
-                <Avatar
-                  rounded
-                  source={this.state.userInfo.photo}
-                  size={100}
-                />
-                <View style={modal.about}>
-                  {console.log(this.state.userInfo)}
-                  <Text style={modal.name}>{this.state.userInfo.name}</Text>
-                  <Text style={{ color: '#626971' }}>{this.state.userInfo.bio}</Text>
-                </View>
-              </View>
-            )}
-
-            {this.state.userInfo && (
-              <View style={modal.followers}>
-                <TouchableOpacity style={modal.followersView}>
-                  <Text style={modal.followBold}>Friends</Text>
-                  <Text>{this.state.userInfo.friends}</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={modal.followersView}>
-                  <Text style={modal.followBold} >Followed by</Text>
-                  <Text> {this.state.userInfo.followers} </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-
-            <View style={modal.buttonsContainer}>
-              <TouchableOpacity style={modal.button}>
-                <Text>Add Friend</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity style={[modal.button, modal.buttonTrash]} onPress={() => this.setState({ visible: false })} >
-                <Icon type="font-awesome" color="#1a76f6" size={18} name="trash" />
-              </TouchableOpacity>
-
-              <TouchableOpacity style={modal.button}>
-                <Text>Follow</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
-
 
       </View>
     );
@@ -219,6 +220,7 @@ const styles = StyleSheet.create({
   container: {
     width: "100%",
     flexDirection: "column",
+    backgroundColor: "#fff"
   },
   header: {
     flexDirection: "row",
@@ -233,7 +235,7 @@ const styles = StyleSheet.create({
   geralContent: {
     marginLeft: 10,
     justifyContent: 'center',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
 
   //Peoples
@@ -241,8 +243,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     margin: 15,
     marginTop: 5,
-    marginBottom: 5
-
+    marginBottom: 5,
   },
   photo: {
     width: 85,
@@ -259,7 +260,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   button: {
-    width: 115,
+    width: "43%",
     height: 40,
     borderRadius: 8,
     justifyContent: "center",

@@ -30,7 +30,8 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     width: "100%",
     borderBottomWidth: 0.5,
-    borderBottomColor: "#ccc"
+    borderBottomColor: "#ccc",
+    backgroundColor: '#fff'
   },
 
   //config

@@ -44,9 +44,9 @@ export default class Home extends Component {
 
           <View style={styles.reactions}>
             <TouchableOpacity style={styles.icons}>
-              <Icon name='heart' type='font-awesome' color="#eb3146" size={20} />
-              <Icon name='thumbs-up' type='font-awesome' color="#135cee" size={20} />
-              <Icon name='grin-stars' type='font-awesome-5' color="#ffd449" size={20} solid={true} />
+              <Icon name='heart' type='font-awesome' color="#eb3146" size={18} />
+              <Icon name='thumbs-up' type='font-awesome' color="#135cee" size={18} />
+              <Icon name='grin-stars' type='font-awesome-5' color="#ffd449" size={18} solid={true} />
               <Text style={styles.text}>1.5k</Text>
             </TouchableOpacity>
 
@@ -67,6 +67,7 @@ const styles = StyleSheet.create({
   post: {
     width: "100%",
     height: 550,
+    backgroundColor:"#fff"
   },
   header: {
     margin: 10,
@@ -122,6 +123,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   text: {
-    color: "#6a696e"
+    color: "#6a696e",
+    fontSize: 12.5
   }
 })

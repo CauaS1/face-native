@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     borderBottomWidth: 5,
-    borderBottomColor: "#ccc"
+    borderBottomColor: "#ccc",
+    backgroundColor:"#fff"
   },
 
   storiesContianer: {

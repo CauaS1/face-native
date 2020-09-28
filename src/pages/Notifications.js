@@ -9,27 +9,74 @@ YellowBox.ignoreWarnings([
   'Avatar.accessory', // remove warning about avatar acessory be removed
 ])
 
-export default class Notifications extends Component {
+const ProfileIcon = ({ item }) => { //after try to do something here
+  const [requested, setrequested] = React.useState(false)
+  return (
+    <View>
+      {!requested ?
+        <TouchableOpacity style={styles.sections} onPress={() => setrequested(true)} >
+          <View style={styles.content} >
+            <View>
+              <Avatar source={item.photo} size={styles.photos} size={80} rounded />
+              <View style={styles.iconOnProfile}>
+                {item.type === 'Friend' ? (
+                  <Icon name="user" type="font-awesome" size={18} color="#fff" />
+                ) :
+                  (
+                    <Icon name="users" type="font-awesome" size={18} color="#fff" />
+                  )
+                }
+              </View>
+            </View>
 
-  profileIcon() { //after try to do something here
-    const types = this.props.notific;
-    const onlyType = types.map((tp) => {
-      if (tp.type === "Friend") {
-        return (
-          <View style={styles.iconOnProfile}>
-            <Icon name="user-alt" type="font-awesome-5" size={16} color="#fff" />
+            <View>
+              {item.type === 'Friend' ? (
+                <Text style={styles.recommend}>You have a new friends suggestions:<Text style={{ fontWeight: 'bold' }}> {item.name} </Text> </Text>
+              ) :
+                (
+                  <Text style={styles.recommend}>You have a new post to see on:<Text style={{ fontWeight: 'bold' }}> {item.name} </Text> </Text>
+                )
+              }
+              <Text style={styles.data}> {item.data} </Text>
+            </View>
+            <Icon name="ellipsis-h" type="font-awesome" size={20} color="#050505" />
           </View>
-        )
-      } else {
-        return (
-          <View style={styles.iconOnProfile}>
-            <Icon name="users" type="font-awesome-5" size={16} color="#fff" />
+        </TouchableOpacity>
+        :
+        <TouchableOpacity style={styles.sectionWhite}>
+          <View style={styles.content} >
+            <View>
+              <Avatar source={item.photo} size={styles.photos} size={80} rounded />
+              <View style={styles.iconOnProfile}>
+                {item.type === 'Friend' ? (
+                  <Icon name="user" type="font-awesome" size={18} color="#fff" />
+                )
+                  : (
+                    <Icon name="users" type="font-awesome" size={18} color="#fff" />
+                  )
+                }
+              </View>
+            </View>
+
+            <View>
+            {item.type === 'Friend' ? (
+                <Text style={styles.recommend}>You have a new friends suggestions:<Text style={{ fontWeight: 'bold' }}> {item.name} </Text> </Text>
+              ) :
+                (
+                  <Text style={styles.recommend}>You have a new post to see on:<Text style={{ fontWeight: 'bold' }}> {item.name} </Text> </Text>
+                )
+              }
+              <Text style={styles.data}> {item.data} </Text>
+            </View>
+            <Icon name="ellipsis-h" type="font-awesome" size={15} color="#050505" />
           </View>
-        )
+        </TouchableOpacity>
       }
-    })
-    return onlyType
-  }
+    </View>
+  );
+}
+
+export default class Notifications extends Component {
 
   render() {
     const NotificBar = this.props.bar
@@ -42,22 +89,7 @@ export default class Notifications extends Component {
           data={AllNotific}
           ListHeaderComponent={<TopBar bar={NotificBar} />}
           keyExtractor={item => item.id.toString()}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={styles.sections}>
-              <View style={styles.content} >
-                <View>
-                  <Avatar source={item.photo} size={styles.photos} size={80} rounded />
-                  {this.profileIcon()}
-                </View>
-
-                <View>
-                  <Text style={styles.recommend}>You habe a new friends suggestions:<Text style={{ fontWeight: 'bold' }}> {item.name} </Text> </Text>
-                  <Text style={styles.data}> {item.data} </Text>
-                </View>
-                <Icon name="ellipsis-h" type="font-awesome" size={20} color="#050505" />
-              </View>
-            </TouchableOpacity>
-          )}
+          renderItem={({ item }) => <ProfileIcon item={item} />}
         />
       </View>
     )
@@ -73,6 +105,11 @@ const styles = StyleSheet.create({
   sections: {
     backgroundColor: "#e7f3ff"
   },
+
+  sectionWhite: {
+    backgroundColor: "#fff",
+  },
+
   content: {
     flexDirection: "row",
     alignItems: "center",
@@ -80,7 +117,7 @@ const styles = StyleSheet.create({
     margin: 8
   },
   photos: {
-    position: "relative"
+    position: "relative",
   },
 
 
@@ -94,8 +131,8 @@ const styles = StyleSheet.create({
   },
 
   iconOnProfile: {
-    width: 30,
-    height: 30,
+    width: 28,
+    height: 28,
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",

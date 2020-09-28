@@ -8,7 +8,7 @@ import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIc
 export default class YourPost extends Component {
   render() {
     return (
-      <View style={{borderBottomWidth: 5,  borderBottomColor: "#ccc"}} >
+      <View style={{borderBottomWidth: 5,  borderBottomColor: "#ccc", backgroundColor: "#fff"}} >
         <View style={styles.mind}>
 
           <Image source={require('../../img/profile.png')} style={styles.photo} />
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#ccc",
     borderRadius: 30,
-    width: 265,
+    width: "80%",
     height: 40,
     padding: 5,
     paddingLeft: 15,
@@ -67,12 +67,13 @@ const styles = StyleSheet.create({
 
   components: {
     flexDirection: "row",
+    width: "100%",
     justifyContent: "center",
     alignItems: "center",
     padding: 10,
   },
   button: {
-    width: 120,
+    width: "35%",
     flexDirection: "row",
     alignItems: 'center' ,
     justifyContent: "center",

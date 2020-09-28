@@ -22,7 +22,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: 'flex-start',
     borderBottomWidth: 5, 
-    borderBottomColor: "#ccc"
+    borderBottomColor: "#ccc",
+    backgroundColor:"#fff"
+
   },
 
   createRoom: {
