@@ -20,5 +20,5 @@ This app was created to practice and learn new things, this app there are some f
 <img src="https://github.com/CauaS1/facebook-reactnative/blob/master/src/img/demo.jpg" />
 
 
-### Credits Images
+### Images Credits
 <i>The profile names are the photo's author, taked from Unsplash, Thanks </i>
